@@ -13,7 +13,7 @@ import butterknife.Unbinder;
  * Created by QKun on 2017/12/4.
  */
 
-public abstract class BaseActivity extends RxAppCompatActivity {
+    public abstract class BaseActivity extends RxAppCompatActivity {
 
     /**
      * 上次点击时间

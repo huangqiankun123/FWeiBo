@@ -14,6 +14,7 @@ import retrofit2.HttpException;
 
 /**
  * Created by Administrator on 2017/11/16.
+ * 这中比较详细 在demo中不方便使用 先存放着 具体错误码还需要与后台通过
  */
 
 public class ExceptionEngine {

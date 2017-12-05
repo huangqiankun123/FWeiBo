@@ -5,7 +5,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 /**
  * Created by QKun on 2017/12/4.
- *
+ *  采用Lifecycle来管理RxJava 的生命周期
  */
 
 public class BasePresenter {

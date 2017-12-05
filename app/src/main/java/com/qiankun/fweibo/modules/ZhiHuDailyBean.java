@@ -1,4 +1,4 @@
-package com.qiankun.fweibo;
+package com.qiankun.fweibo.modules;
 
 import java.util.List;
 

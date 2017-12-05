@@ -7,17 +7,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class BaseResponse<T> {
-    @SerializedName("msg")
+    @SerializedName("reason")
     private String msg;
 
-    @SerializedName("retCode")
+    @SerializedName("error_code")
     private int code;
 
     @SerializedName("result")
     private T result;
 
     public boolean isSuccess() {
-        return code == 200 ? true : false;
+        return msg.equals("请求成功") ? true : false;
     }
 
     public String getMsg() {

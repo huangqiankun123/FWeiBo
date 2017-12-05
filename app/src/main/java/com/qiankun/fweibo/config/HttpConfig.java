@@ -11,6 +11,6 @@ public class HttpConfig {
     public static String BASE_URL="https://www.baidu.com/";
     public static String ZHIHU_API_URL = "http://news-at.zhihu.com/api/4/";
     //微信精选
-    public static String WEIXIN_API_URL = "http://v.juhe.cn/weixin/"; //115ffcbdaa52e18ed750e644d757af15
+    public static String WEIXIN_API_URL = "http://v.juhe.cn/"; //115ffcbdaa52e18ed750e644d757af15
 
 }

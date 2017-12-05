@@ -37,13 +37,14 @@ public class InterceptorUtil {
         return new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                try {
-                    String text = URLDecoder.decode(message, "utf-8");
-                    LogUtils.e(TAG, text);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    LogUtils.e(TAG, message);
-                }
+//                try {
+//                    String text = URLDecoder.decode(message, "utf-8");
+//                    LogUtils.e(TAG, text);
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                    LogUtils.e(TAG, message);
+//                }
+                LogUtils.e(TAG + message);
 
             }
         }).setLevel(HttpLoggingInterceptor.Level.BODY);//设置打印数据的级别
