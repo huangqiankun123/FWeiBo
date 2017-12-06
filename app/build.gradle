@@ -58,4 +58,10 @@ dependencies {
     compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
     // takePhoto
     compile 'com.jph.takephoto:takephoto_library:4.0.3'
+    //glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    //circleimageview 圆形图片
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    //recycler
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.0'
 }
