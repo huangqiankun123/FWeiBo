@@ -5,15 +5,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.bumptech.glide.Glide;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.compress.CompressConfig;
@@ -28,23 +30,15 @@ import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 import com.qiankun.fweibo.R;
 import com.qiankun.fweibo.base.BaseFragment;
-import com.qiankun.fweibo.core.ApiManager;
-import com.qiankun.fweibo.core.BaseObserver;
-import com.qiankun.fweibo.core.BaseResponse;
-import com.qiankun.fweibo.modules.WechatBean;
-import com.qiankun.fweibo.widget.TakeOrPickPhotoManager;
 
 import java.io.File;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by QKun on 2017/12/5.
+ * 参考：https://github.com/crazycodeboy/TakePhoto
  */
 
 public class AFragment extends BaseFragment implements TakePhoto.TakeResultListener, InvokeListener {
@@ -53,8 +47,23 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     Button mZhaoxiang;
     @BindView(R.id.xiangce)
     Button mXiangce;
+    @BindView(R.id.iv_icon)
+    ImageView mIvIcon;
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
+    public final static int mMessageFlag = 0x1010;
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case mMessageFlag:
+                    Glide.with(mBaseActivity).load((File) msg.obj).into(mIvIcon);
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     public static AFragment newInstance() {
         AFragment aFragment = new AFragment();
@@ -277,6 +286,14 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     @Override
     public void takeSuccess(TResult result) {
         LogUtils.i("takeSuccess：" + result.getImage().getCompressPath());
+        File file = new File(result.getImages().get(0).getCompressPath());
+        String absolutePath = file.getAbsolutePath();
+
+        Message message = mHandler.obtainMessage();
+        message.what = mMessageFlag;
+        message.obj = file;
+        mHandler.sendMessage(message);
+
     }
 
     @Override
@@ -287,7 +304,5 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     @Override
     public void takeCancel() {
     }
-
-
     /***********************************TakePhoto.TakeResultListener****************************************/
 }
