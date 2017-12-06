@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,8 @@ import butterknife.Unbinder;
  * Created by QKun on 2017/12/5.
  */
 
-public abstract class BaseFragment extends Fragment {
-    private BaseActivity mBaseActivity;
+public abstract class BaseFragment extends com.trello.rxlifecycle2.components.support.RxFragment {
+    protected BaseActivity mBaseActivity;
     private final String TAG = this.getClass().getSimpleName();
     protected View mRootView;
     private Unbinder mBind;

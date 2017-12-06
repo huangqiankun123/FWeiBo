@@ -8,13 +8,8 @@ import android.widget.FrameLayout;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.blankj.utilcode.util.BarUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.qiankun.fweibo.R;
 import com.qiankun.fweibo.base.BaseActivity;
-import com.qiankun.fweibo.core.ApiManager;
-import com.qiankun.fweibo.core.BaseObserver;
-import com.qiankun.fweibo.core.BaseResponse;
-import com.qiankun.fweibo.modules.WechatBean;
 import com.qiankun.fweibo.modules.a.AFragment;
 import com.qiankun.fweibo.modules.b.BFragment;
 import com.qiankun.fweibo.modules.c.CFragment;
@@ -22,8 +17,6 @@ import com.qiankun.fweibo.modules.d.DFragment;
 import com.qiankun.fweibo.modules.e.EFragment;
 
 import butterknife.BindView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener {
 
@@ -93,18 +86,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected void initData(Bundle bundle) {
-        ApiManager.getApiManager().getWechatApi()
-                .getWechat("115ffcbdaa52e18ed750e644d757af15", 1, 20)
-                .compose(this.<BaseResponse<WechatBean>>bindToLifecycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<WechatBean>(this, true) {
-                    @Override
-                    protected void onSuccess(WechatBean wechatBean) {
-                        LogUtils.i(wechatBean.getTotalPage() + "");
-                    }
-                });
-
 
     }
 
