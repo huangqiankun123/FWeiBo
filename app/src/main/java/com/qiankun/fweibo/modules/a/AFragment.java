@@ -1,5 +1,6 @@
 package com.qiankun.fweibo.modules.a;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +27,7 @@ import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.LubanOptions;
 import com.jph.takephoto.model.TContextWrap;
+import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.model.TakePhotoOptions;
 import com.jph.takephoto.permission.InvokeListener;
@@ -32,6 +37,7 @@ import com.qiankun.fweibo.R;
 import com.qiankun.fweibo.base.BaseFragment;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,23 +53,30 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     Button mZhaoxiang;
     @BindView(R.id.xiangce)
     Button mXiangce;
-    @BindView(R.id.iv_icon)
-    ImageView mIvIcon;
+    @BindView(R.id.iv)
+    ImageView iv;
+
+    @BindView(R.id.reycyer_view)
+    RecyclerView mReycyerView;
     private TakePhoto takePhoto;
     private InvokeParam invokeParam;
     public final static int mMessageFlag = 0x1010;
-
+    private ArrayList<TImage> mTImages = new ArrayList<>();
+    @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case mMessageFlag:
-                    Glide.with(mBaseActivity).load((File) msg.obj).into(mIvIcon);
+                    //images 集合
+                    mCameraAdapter.getData().addAll((ArrayList<TImage>)msg.obj);
+                    mCameraAdapter.notifyDataSetChanged();
                     break;
             }
             super.handleMessage(msg);
         }
     };
+    private CameraAdapter mCameraAdapter;
 
     public static AFragment newInstance() {
         AFragment aFragment = new AFragment();
@@ -77,7 +90,9 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
 
     @Override
     protected void initView() {
-
+        mReycyerView.setLayoutManager(new LinearLayoutManager(mBaseActivity));
+        mCameraAdapter = new CameraAdapter(R.layout.camer_item, mTImages);
+        mReycyerView.setAdapter(mCameraAdapter);
     }
 
     @OnClick({R.id.zhaoxiang})
@@ -119,7 +134,7 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
                 takePhoto.onPickFromCapture(imageUri);
             }
         } else {//选取图片
-            int limit = 1;//选择图片的个数。
+            int limit = 10;//选择图片的个数。
             if (limit > 1) {
                 //当选择图片大于1个时是否裁剪
                 if (true) {
@@ -287,12 +302,13 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     public void takeSuccess(TResult result) {
         LogUtils.i("takeSuccess：" + result.getImage().getCompressPath());
         File file = new File(result.getImages().get(0).getCompressPath());
-        String absolutePath = file.getAbsolutePath();
-
+//        String absolutePath = file.getAbsolutePath();
+        ArrayList<TImage> images = result.getImages();
         Message message = mHandler.obtainMessage();
         message.what = mMessageFlag;
-        message.obj = file;
+        message.obj = images;
         mHandler.sendMessage(message);
+
 
     }
 
@@ -304,5 +320,7 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     @Override
     public void takeCancel() {
     }
+
+
     /***********************************TakePhoto.TakeResultListener****************************************/
 }
