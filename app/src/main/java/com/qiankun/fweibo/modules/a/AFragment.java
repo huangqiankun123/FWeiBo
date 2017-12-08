@@ -11,7 +11,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.bumptech.glide.Glide;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.compress.CompressConfig;
@@ -45,6 +43,7 @@ import butterknife.OnClick;
 /**
  * Created by QKun on 2017/12/5.
  * 参考：https://github.com/crazycodeboy/TakePhoto
+ * 跳转Activity 浏览图片 https://github.com/chrisbanes/PhotoView
  */
 
 public class AFragment extends BaseFragment implements TakePhoto.TakeResultListener, InvokeListener {
@@ -90,7 +89,7 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
 
     @Override
     protected void initView() {
-        mReycyerView.setLayoutManager(new LinearLayoutManager(mBaseActivity));
+        mReycyerView.setLayoutManager(new LinearLayoutManager(mContext));
         mCameraAdapter = new CameraAdapter(R.layout.camer_item, mTImages);
         mReycyerView.setAdapter(mCameraAdapter);
     }
@@ -106,7 +105,7 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
 
     private void showTakePhotoDialog() {
         final String items[] = {"拍照", "相册"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(mBaseActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("选择头像");
         builder.setItems(items, new DialogInterface.OnClickListener() {
 
@@ -239,7 +238,7 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
 //                .compose(this.<BaseResponse<WechatBean>>bindToLifecycle())
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new BaseObserver<WechatBean>(mBaseActivity, true) {
+//                .subscribe(new BaseObserver<WechatBean>(mContext, true) {
 //                    @Override
 //                    protected void onSuccess(WechatBean wechatBean) {
 //                        LogUtils.i(wechatBean.getTotalPage() + "");
@@ -270,14 +269,14 @@ public class AFragment extends BaseFragment implements TakePhoto.TakeResultListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionManager.handlePermissionsResult(mBaseActivity, type, invokeParam, this);
+        PermissionManager.handlePermissionsResult(mContext, type, invokeParam, this);
     }
 
     /***********************************InvokeListener 权限结束**********/
 
     @Override
     public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(mBaseActivity), invokeParam.getMethod());
+        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(mContext), invokeParam.getMethod());
         if (PermissionManager.TPermissionType.WAIT.equals(type)) {
             this.invokeParam = invokeParam;
         }

@@ -18,7 +18,7 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseFragment extends com.trello.rxlifecycle2.components.support.RxFragment {
-    protected BaseActivity mBaseActivity;
+    protected BaseActivity mContext;
     private final String TAG = this.getClass().getSimpleName();
     protected View mRootView;
     private Unbinder mBind;
@@ -27,7 +27,7 @@ public abstract class BaseFragment extends com.trello.rxlifecycle2.components.su
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.mBaseActivity = (BaseActivity) context;
+        this.mContext = (BaseActivity) context;
     }
 
     @Override
